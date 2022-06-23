@@ -1,4 +1,8 @@
-import { IsByteLength, IsDate, IsNumber, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsByteLength, IsDate, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
+import { Department } from "src/department/department.entity";
+import { Lvl } from "src/lvl/lvl.entity";
+import { Project } from "src/project/project.entity";
 
 export class UpdateWorkerDTO{
     @IsOptional()
@@ -20,10 +24,14 @@ export class UpdateWorkerDTO{
     salary?: number;
 
     @IsOptional()
-    @IsNumber()
-    lvlid?: number;
+    @IsArray()
+    lvl?: Lvl;
 
     @IsOptional()
-    @IsNumber() 
-    departmentid?: number;
+    @IsArray()
+    department?: Department;
+
+    @IsOptional()
+    @IsArray()
+    projects?: Project[];
 }

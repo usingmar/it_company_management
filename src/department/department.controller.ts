@@ -30,7 +30,7 @@ export class DepartmentController {
   }
 
   @Post()
-  async create(@Body() DTO: CreateDepartmentDTO): Promise<Department>{
+  async create(@Body() DTO: CreateDepartmentDTO){
     return await this.departmentService.create(DTO);
   }
 

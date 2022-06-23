@@ -29,7 +29,7 @@ export class ProjectController {
   }
 
   @Post()
-  async create(@Body() DTO: CreateProjectDTO): Promise<Project>{
+  async create(@Body() DTO: CreateProjectDTO){
     return await this.projectService.create(DTO);
   }
 

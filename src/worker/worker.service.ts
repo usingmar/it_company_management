@@ -18,24 +18,24 @@ export class WorkerService {
   }
 
   async findItem(_id: number): Promise<Worker> {
-    return await this.workerRepository.findOneOrFail({where:{id: _id},relations: {department: true, lvl: true, projects: true}})
+    return await this.workerRepository.findOneOrFail({where:{id: _id},relations: {department: true, lvl: true, projects: true }})
     .catch(() => {
       throw new HttpException({
       statusCode: "400",
       error: "Bad request",
-      message: "No such user"
+      message: "No such worker"
     }, 400)
   })
   }
 
   async remove(_id: number): Promise<Worker> {
     let deleteAim: Worker;
-    await this.workerRepository.findOneOrFail({where: {id: _id}, relations: {department: true, lvl: true, projects: true}})
+    await this.workerRepository.findOneOrFail({where: {id: _id}, relations: {department: true, lvl: true, projects: true }})
     .catch(() => {
       throw new HttpException({
       statusCode: "400",
       error: "Bad request",
-      message: "No such user"
+      message: "No such worker"
     }, 400)})
     .then((data) => {
       deleteAim = data;
@@ -44,38 +44,27 @@ export class WorkerService {
     return deleteAim;
   }
 
-  async update(_id: number, DTO: UpdateWorkerDTO): Promise<Worker>{
+  async update(_id: number, DTO: UpdateWorkerDTO): Promise<Worker> {
     checkNumberOfProperties(DTO);
-    await this.workerRepository.findOneOrFail({where: {id: _id}, relations: {department: true, lvl: true, projects: true}})
-    .then(() => {
-      this.workerRepository.update(_id, DTO);
-    })
-    .catch(() => {
-      throw new HttpException({
-      statusCode: "400",
-      error: "Bad request",
-      message: "No such user"
-    }, 400)})
-    return await this.workerRepository.findOneOrFail({where: {id: _id}, relations: {department: true, lvl: true, projects: true}})
+    const original = await this.workerRepository.findOne({where: {id: _id}, relations: {department: true, lvl: true, projects: true }})
+  if(original){  
+      await this.workerRepository.save({id: parseInt(_id.toString()), ...DTO});
+  }   
+  const updated = await this.workerRepository.findOne({where: {id: _id}, relations: {department: true, lvl: true, projects: true }})     
+  return updated
   }
 
-  async put(_id: number, DTO: CreateWorkerDTO): Promise<Worker>{
+  async put(_id: number, DTO: CreateWorkerDTO): Promise<Worker> {
     checkNumberOfProperties(DTO);
-    await this.workerRepository.findOneOrFail({where: {id: _id}, relations: {department: true, lvl: true, projects: true}})
-    .then(() => {
-    this.workerRepository.update(_id, DTO);
-    })
-    .catch(() => {
-      this.workerRepository.insert({
-        id: _id,
-        ...DTO
-      })});
-      return await this.workerRepository.findOneOrFail({where: {id: _id}, relations: {department: true, lvl: true, projects: true}})
+    const original = await this.workerRepository.findOne({where: {id: _id}, relations: {department: true, lvl: true, projects: true }})
+  if(original){  
+      await this.workerRepository.save({id: parseInt(_id.toString()), ...DTO});
+  }   
+  const updated = await this.workerRepository.findOne({where: {id: _id}, relations: {department: true, lvl: true, projects: true }})     
+  return updated
   }
 
-  async create(DTO: CreateWorkerDTO): Promise<Worker>{
-    checkNumberOfProperties(DTO);
-    await this.workerRepository.insert(DTO);
-    return await this.workerRepository.findOneOrFail({where: {...DTO},relations: {department: true, lvl: true, projects: true}}) 
+  async create(DTO: CreateWorkerDTO): Promise<void>{;
+    await this.workerRepository.save(DTO); 
   }
 }

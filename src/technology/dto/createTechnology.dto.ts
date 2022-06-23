@@ -1,17 +1,23 @@
-import { IsByteLength, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsByteLength, IsDefined, IsOptional, IsString, ValidateNested } from "class-validator";
+import { Project } from "src/project/project.entity";
 
 export class CreateTechnologyDTO{
 
-    @IsOptional()
+    @IsDefined()
     @IsString()
-    codelanguage?: string;
+    codelanguage: string;
 
-    @IsOptional()
+    @IsDefined()
     @IsString()
     @IsByteLength(1, 50)
-    technologyversion?: string;
+    technologyversion: string;
 
     @IsString()
     @IsByteLength(1, 100)
     technologyname: string;
+
+    @IsDefined()
+    @IsArray()
+    readonly technologies: Project[];
 }

@@ -1,4 +1,8 @@
-import { IsByteLength, IsDate, IsDateString, IsNumber, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsByteLength, IsDate, IsDateString, IsDefined, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
+import { Department } from "src/department/department.entity";
+import { Lvl } from "src/lvl/lvl.entity";
+import { Project } from "src/project/project.entity";
 
 export class CreateWorkerDTO{
     @IsString()
@@ -12,15 +16,19 @@ export class CreateWorkerDTO{
     @IsDate()
     dateofmembership: Date;
 
-    @IsOptional()
+    @IsDefined()
     @IsNumber()
-    salary?: number;
+    salary: number;
 
-    @IsOptional()
-    @IsNumber()
-    lvlid?: number;
+    @IsDefined()
+    @IsArray()
+    lvl: Lvl;
 
-    @IsOptional()
-    @IsNumber() 
-    departmentid?: number;
+    @IsDefined()
+    @IsArray()
+    department: Department;
+
+    @IsDefined()
+    @IsArray()
+    projects: Project[];
 }

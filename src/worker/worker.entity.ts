@@ -19,19 +19,13 @@ export class Worker {
 
   @Column()
   salary : number;
-
-  @Column()
-  lvlid: number;
   
   @ManyToOne(() => Lvl, (lvl) => lvl.workers)
-  @JoinColumn({name: 'lvlid'})
+  @JoinColumn({ name: "lvlid" })
   lvl : Lvl;
 
-  @Column()
-  departmentid: number;
-
   @ManyToOne(() => Department, (department) => department.workers, {onDelete: 'SET NULL', onUpdate: 'CASCADE'})
-  @JoinColumn({name: 'departmentid'})
+  @JoinColumn({name: "departmentid"})
   department: Department;
 
   @ManyToMany(() => Project, (project) => project.workers)
@@ -39,9 +33,10 @@ export class Worker {
     name: 'worker_project',
     joinColumn: {
       name: 'workerid'
+      
     },
     inverseJoinColumn: {
-      name: 'projectid'
+      name: 'projectid' 
     }
   })
   projects: Project[];

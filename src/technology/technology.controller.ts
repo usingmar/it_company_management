@@ -29,7 +29,7 @@ export class TechnologyController {
   }
 
   @Post()
-  async create(@Body() DTO: CreateTechnologyDTO): Promise<Technology>{
+  async create(@Body() DTO: CreateTechnologyDTO){
     return await this.technologyService.create(DTO);
   }
 

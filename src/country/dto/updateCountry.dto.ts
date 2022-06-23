@@ -1,16 +1,19 @@
-import { IsOptional,IsByteLength, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsOptional,IsByteLength, IsString, IsArray, ValidateNested } from "class-validator";
+import { Company } from "src/company/company.entity";
 
 export class UpdateCountryDTO{
     @IsOptional()
     @IsString()
     @IsByteLength(1,255)
-    countryname?: string;
+    readonly countryname?: string;
     
     @IsOptional()
     @IsString()
     @IsByteLength(1,255)
-    continentname?: string
+    readonly continentname?: string
 
     @IsOptional()
-    readonly companies?: number[]
+    @IsArray()
+    readonly companies?: Company[]
 }

@@ -18,24 +18,24 @@ export class TechnologyService {
   }
 
   async findItem(_id: number): Promise<Technology> {
-    return await this.technologyRepository.findOneOrFail({where:{id: _id},relations: {projects: true}})
+    return await this.technologyRepository.findOneOrFail({where:{id: _id},relations: {projects: true }})
     .catch(() => {
       throw new HttpException({
       statusCode: "400",
       error: "Bad request",
-      message: "No such user"
+      message: "No such technology"
     }, 400)
   })
   }
 
   async remove(_id: number): Promise<Technology> {
     let deleteAim: Technology;
-    await this.technologyRepository.findOneOrFail({where: {id: _id}, relations: {projects: true}})
+    await this.technologyRepository.findOneOrFail({where: {id: _id}, relations: {projects: true }})
     .catch(() => {
       throw new HttpException({
       statusCode: "400",
       error: "Bad request",
-      message: "No such user"
+      message: "No such technology"
     }, 400)})
     .then((data) => {
       deleteAim = data;
@@ -44,38 +44,27 @@ export class TechnologyService {
     return deleteAim;
   }
 
-  async update(_id: number, DTO: UpdateTechnologyDTO): Promise<Technology>{
+  async update(_id: number, DTO: UpdateTechnologyDTO): Promise<Technology> {
     checkNumberOfProperties(DTO);
-    await this.technologyRepository.findOneOrFail({where: {id: _id}, relations: {projects: true}})
-    .then(() => {
-      this.technologyRepository.update(_id, DTO);
-    })
-    .catch(() => {
-      throw new HttpException({
-      statusCode: "400",
-      error: "Bad request",
-      message: "No such user"
-    }, 400)})
-    return await this.technologyRepository.findOneOrFail({where: {id: _id}, relations: {projects: true}})
+    const original = await this.technologyRepository.findOne({where: {id: _id}, relations: {projects: true }})
+  if(original){  
+      await this.technologyRepository.save({id: parseInt(_id.toString()), ...DTO});
+  }   
+  const updated = await this.technologyRepository.findOne({where: {id: _id}, relations: {projects: true }})     
+  return updated
   }
 
-  async put(_id: number, DTO: CreateTechnologyDTO): Promise<Technology>{
+  async put(_id: number, DTO: CreateTechnologyDTO): Promise<Technology> {
     checkNumberOfProperties(DTO);
-    await this.technologyRepository.findOneOrFail({where: {id: _id}, relations: {projects: true}})
-    .then(() => {
-    this.technologyRepository.update(_id, DTO);
-    })
-    .catch(() => {
-      this.technologyRepository.insert({
-        id: _id,
-        ...DTO
-      })});
-      return await this.technologyRepository.findOneOrFail({where: {id: _id}, relations: {projects: true}})
+    const original = await this.technologyRepository.findOne({where: {id: _id}, relations: {projects: true }})
+  if(original){  
+      await this.technologyRepository.save({id: parseInt(_id.toString()), ...DTO});
+  }   
+  const updated = await this.technologyRepository.findOne({where: {id: _id}, relations: {projects: true }})     
+  return updated
   }
 
-  async create(DTO: CreateTechnologyDTO): Promise<Technology>{
-    checkNumberOfProperties(DTO);
-    await this.technologyRepository.insert(DTO);
-    return await this.technologyRepository.findOneOrFail({where: {...DTO},relations: {projects: true}}) 
+  async create(DTO: CreateTechnologyDTO): Promise<void>{;
+    await this.technologyRepository.save(DTO); 
   }
 }

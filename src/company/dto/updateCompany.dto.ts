@@ -1,5 +1,7 @@
-import { IsByteLength, IsDefined, IsNumber, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsByteLength, IsDefined, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
 import { Country } from "src/country/country.entity";
+import { Department } from "src/department/department.entity";
 
 
 export class UpdateCompanyDTO{
@@ -18,5 +20,10 @@ export class UpdateCompanyDTO{
     readonly numberofworkers?: number;
 
     @IsOptional()
-    readonly countries?: number[]
+    @IsArray()
+    readonly countries?: Country[]
+
+    @IsOptional()
+    @IsArray()
+    readonly departments?: Department[] 
 }

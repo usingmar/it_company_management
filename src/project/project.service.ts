@@ -14,28 +14,28 @@ export class ProjectService {
   ) {}
 
   async findAll(): Promise<Project[]> {
-    return await this.projectRepository.find({relations: { department: true, technologies: true, workers: true }});
+    return await this.projectRepository.find({relations: { department: true, workers: true, technologies: true }});
   }
 
   async findItem(_id: number): Promise<Project> {
-    return await this.projectRepository.findOneOrFail({where:{id: _id},relations: {department: true, technologies: true, workers: true}})
+    return await this.projectRepository.findOneOrFail({where:{id: _id},relations: {department: true, workers: true, technologies: true }})
     .catch(() => {
       throw new HttpException({
       statusCode: "400",
       error: "Bad request",
-      message: "No such user"
+      message: "No such project"
     }, 400)
   })
   }
 
   async remove(_id: number): Promise<Project> {
     let deleteAim: Project;
-    await this.projectRepository.findOneOrFail({where: {id: _id}, relations: {department: true, technologies: true, workers: true}})
+    await this.projectRepository.findOneOrFail({where: {id: _id}, relations: {department: true, workers: true, technologies: true }})
     .catch(() => {
       throw new HttpException({
       statusCode: "400",
       error: "Bad request",
-      message: "No such user"
+      message: "No such project"
     }, 400)})
     .then((data) => {
       deleteAim = data;
@@ -44,38 +44,27 @@ export class ProjectService {
     return deleteAim;
   }
 
-  async update(_id: number, DTO: UpdateProjectDTO): Promise<Project>{
+  async update(_id: number, DTO: UpdateProjectDTO): Promise<Project> {
     checkNumberOfProperties(DTO);
-    await this.projectRepository.findOneOrFail({where: {id: _id}, relations: {department: true, technologies: true, workers: true}})
-    .then(() => {
-      this.projectRepository.update(_id, DTO);
-    })
-    .catch(() => {
-      throw new HttpException({
-      statusCode: "400",
-      error: "Bad request",
-      message: "No such user"
-    }, 400)})
-    return await this.projectRepository.findOneOrFail({where: {id: _id}, relations: {department: true, technologies: true, workers: true}})
+    const original = await this.projectRepository.findOne({where: {id: _id}, relations: {department: true, workers: true, technologies: true }})
+  if(original){  
+      await this.projectRepository.save({id: parseInt(_id.toString()), ...DTO});
+  }   
+  const updated = await this.projectRepository.findOne({where: {id: _id}, relations: {department: true, workers: true, technologies: true }})     
+  return updated
   }
 
-  async put(_id: number, DTO: CreateProjectDTO): Promise<Project>{
+  async put(_id: number, DTO: CreateProjectDTO): Promise<Project> {
     checkNumberOfProperties(DTO);
-    await this.projectRepository.findOneOrFail({where: {id: _id}, relations: {department: true, technologies: true, workers: true}})
-    .then(() => {
-    this.projectRepository.update(_id, DTO);
-    })
-    .catch(() => {
-      this.projectRepository.insert({
-        id: _id,
-        ...DTO
-      })});
-      return await this.projectRepository.findOneOrFail({where: {id: _id}, relations: {department: true, technologies: true, workers: true}})
+    const original = await this.projectRepository.findOne({where: {id: _id}, relations: {department: true, workers: true, technologies: true }})
+  if(original){  
+      await this.projectRepository.save({id: parseInt(_id.toString()), ...DTO});
+  }   
+  const updated = await this.projectRepository.findOne({where: {id: _id}, relations: {department: true, workers: true, technologies: true }})     
+  return updated
   }
 
-  async create(DTO: CreateProjectDTO): Promise<Project>{
-    checkNumberOfProperties(DTO);
-    await this.projectRepository.insert(DTO);
-    return await this.projectRepository.findOneOrFail({where: {...DTO},relations: {department: true, technologies: true, workers: true}}) 
+  async create(DTO: CreateProjectDTO): Promise<void>{;
+    await this.projectRepository.save(DTO); 
   }
 }

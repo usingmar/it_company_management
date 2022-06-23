@@ -1,5 +1,7 @@
-import {IsString, IsNumber, IsOptional, IsByteLength, IsDefined} from 'class-validator'
+import { Type } from 'class-transformer';
+import {IsString, IsNumber, IsByteLength, IsDefined, IsArray, ValidateNested} from 'class-validator'
 import { Country } from 'src/country/country.entity';
+import { Department } from 'src/department/department.entity';
 
 
 export class CreateCompanyDTO{
@@ -8,15 +10,20 @@ export class CreateCompanyDTO{
     @IsByteLength(1,255)
     readonly companyname: string;
 
-    @IsOptional()
+    @IsDefined()
     @IsString()
     @IsByteLength(1,255)
-    readonly companytype?: string;
+    readonly companytype: string;
 
-    @IsOptional()
+    @IsDefined()
     @IsNumber()
-    readonly numberofworkers?: number;
+    readonly numberofworkers: number;
 
-    @IsOptional()
-    readonly countries?: number[]
+    @IsDefined()
+    @IsArray()
+    countries: Country[]
+
+    @IsDefined()
+    @IsArray()
+    departments: Department[] 
 }

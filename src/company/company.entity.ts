@@ -16,10 +16,7 @@ export class Company {
   @Column()
   numberofworkers: number;
 
-  @Column()
-  countries: number[]
-
-  @ManyToMany(() => Country, country => country.companies)
+  @ManyToMany(() => Country, country => country.companies, {cascade: ["insert", "update", "remove"]})
   @JoinTable({
     name: 'company_country',
     joinColumn: {
@@ -29,6 +26,7 @@ export class Company {
       name: 'countryid'
     }
   })
+  countries: Country[]
 
   @OneToMany(() => Department, department => department.company)
   departments: Department[];

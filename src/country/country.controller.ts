@@ -29,7 +29,7 @@ export class CountryController {
   }
 
   @Post()
-  async create(@Body() DTO: CreateCountryDTO): Promise<Country>{
+  async create(@Body() DTO: CreateCountryDTO){
     return await this.countryService.create(DTO);
   }
 

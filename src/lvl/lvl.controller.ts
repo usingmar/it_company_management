@@ -29,7 +29,7 @@ export class LvlController {
   }
 
   @Post()
-  async create(@Body() DTO: CreateLvlDTO): Promise<Lvl>{
+  async create(@Body() DTO: CreateLvlDTO){
     return await this.lvlService.create(DTO);
   }
 

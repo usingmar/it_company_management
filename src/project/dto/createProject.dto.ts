@@ -1,4 +1,8 @@
-import { IsByteLength, IsNumber, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsByteLength, IsDefined, IsString, ValidateNested } from "class-validator";
+import { Department } from "src/department/department.entity";
+import { Technology } from "src/technology/technology.entity";
+import { Worker } from "../../worker/worker.entity"
 
 export class CreateProjectDTO{
 
@@ -6,12 +10,19 @@ export class CreateProjectDTO{
     @IsByteLength(1)
     scheme: string;
 
-    @IsOptional()
+    @IsDefined()
     @IsString()
     @IsByteLength(1)
-    stage?: string;
+    stage: string;
 
-    @IsOptional()
-    @IsNumber()
-    departmentid?: number;
+    @IsDefined()
+    department: Department;
+
+    @IsDefined()
+    @IsArray()
+    readonly workers: Worker[];
+
+    @IsDefined()
+    @IsArray()
+    readonly technologies: Technology[];
 }

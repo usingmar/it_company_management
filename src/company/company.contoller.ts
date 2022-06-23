@@ -20,12 +20,12 @@ export class CompanyController {
   }
 
   @Patch(':id')
-  async update(@Param() {id}, @Body() DTO: UpdateCompanyDTO): Promise<Company>{
+  async update(@Param() {id}, @Body() DTO: UpdateCompanyDTO){
     return await this.companyService.update(id, DTO);
   }
 
   @Put(':id')
-  async replace(@Param() {id}, @Body() DTO: CreateCompanyDTO): Promise<Company>{
+  async replace(@Param() {id}, @Body() DTO: CreateCompanyDTO): Promise<Company> {
     return await this.companyService.put(id, DTO);
   }
 

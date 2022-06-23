@@ -13,6 +13,5 @@ export class Country {
   continentname: string;
 
   @ManyToMany(() => Company, company => company.countries)
-  @Column()
-  companies: number[]
+  companies: Company[]
 }

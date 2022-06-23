@@ -29,7 +29,7 @@ export class WorkerController {
   }
 
   @Post()
-  async create(@Body() DTO: CreateWorkerDTO): Promise<Worker>{
+  async create(@Body() DTO: CreateWorkerDTO){
     return await this.workerService.create(DTO);
   }
 

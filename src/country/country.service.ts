@@ -14,7 +14,7 @@ export class CountryService {
   ) {}
 
   async findAll(): Promise<Country[]> {
-    return await this.countryRepository.find({relations: { companies: true }});
+    return await this.countryRepository.find({relations: { companies: true}});
   }
 
   async findItem(_id: number): Promise<Country> {
@@ -23,7 +23,7 @@ export class CountryService {
       throw new HttpException({
       statusCode: "400",
       error: "Bad request",
-      message: "No such user"
+      message: "No such country"
     }, 400)
   })
   }
@@ -35,7 +35,7 @@ export class CountryService {
       throw new HttpException({
       statusCode: "400",
       error: "Bad request",
-      message: "No such user"
+      message: "No such country"
     }, 400)})
     .then((data) => {
       deleteAim = data;
@@ -44,38 +44,28 @@ export class CountryService {
     return deleteAim;
   }
 
-  async update(_id: number, DTO: UpdateCountryDTO): Promise<Country>{
+  async update(_id: number, DTO: UpdateCountryDTO): Promise<Country> {
     checkNumberOfProperties(DTO);
-    await this.countryRepository.findOneOrFail({where: {id: _id}, relations: {companies: true}})
-    .then(() => {
-      this.countryRepository.update(_id, DTO);
-    })
-    .catch(() => {
-      throw new HttpException({
-      statusCode: "400",
-      error: "Bad request",
-      message: "No such user"
-    }, 400)})
-    return await this.countryRepository.findOneOrFail({where: {id: _id}, relations: {companies: true}})
+    const original = await this.countryRepository.findOne({where: {id: _id}, relations: {companies: true}})
+  if(original){  
+      await this.countryRepository.save({id: parseInt(_id.toString()), ...DTO});
+  }   
+  const updated = await this.countryRepository.findOne({where: {id: _id}, relations: {companies: true}})     
+  return updated
   }
 
-  async put(_id: number, DTO: CreateCountryDTO): Promise<Country>{
+  async put(_id: number, DTO: CreateCountryDTO): Promise<Country> {
     checkNumberOfProperties(DTO);
-    await this.countryRepository.findOneOrFail({where: {id: _id}, relations: {companies: true}})
-    .then(() => {
-    this.countryRepository.update(_id, DTO);
-    })
-    .catch(() => {
-      this.countryRepository.insert({
-        id: _id,
-        ...DTO
-      })});
-      return await this.countryRepository.findOneOrFail({where: {id: _id}, relations: {companies: true}})
+    const original = await this.countryRepository.findOne({where: {id: _id}, relations: {companies: true}})
+  if(original){  
+      await this.countryRepository.save({id: parseInt(_id.toString()), ...DTO});
+  }   
+  const updated = await this.countryRepository.findOne({where: {id: _id}, relations: {companies: true}})     
+  return updated
   }
 
-  async create(DTO: CreateCountryDTO): Promise<Country>{
-    checkNumberOfProperties(DTO);
-    await this.countryRepository.insert(DTO);
-    return await this.countryRepository.findOneOrFail({where: {...DTO},relations: {companies: true}}) 
+  async create(DTO: CreateCountryDTO): Promise<void>{;
+    await this.countryRepository.save(DTO); 
   }
 }
+

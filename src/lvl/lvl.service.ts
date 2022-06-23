@@ -18,24 +18,24 @@ export class LvlService {
   }
 
   async findItem(_id: number): Promise<Lvl> {
-    return await this.lvlRepository.findOneOrFail({where:{id: _id},relations: {workers: true}})
+    return await this.lvlRepository.findOneOrFail({where:{id: _id},relations: {workers: true }})
     .catch(() => {
       throw new HttpException({
       statusCode: "400",
       error: "Bad request",
-      message: "No such user"
+      message: "No such level"
     }, 400)
   })
   }
 
   async remove(_id: number): Promise<Lvl> {
     let deleteAim: Lvl;
-    await this.lvlRepository.findOneOrFail({where: {id: _id}, relations: {workers: true}})
+    await this.lvlRepository.findOneOrFail({where: {id: _id}, relations: {workers: true }})
     .catch(() => {
       throw new HttpException({
       statusCode: "400",
       error: "Bad request",
-      message: "No such user"
+      message: "No such level"
     }, 400)})
     .then((data) => {
       deleteAim = data;
@@ -44,38 +44,27 @@ export class LvlService {
     return deleteAim;
   }
 
-  async update(_id: number, DTO: UpdateLvlDTO): Promise<Lvl>{
+  async update(_id: number, DTO: UpdateLvlDTO): Promise<Lvl> {
     checkNumberOfProperties(DTO);
-    await this.lvlRepository.findOneOrFail({where: {id: _id}, relations: {workers: true}})
-    .then(() => {
-      this.lvlRepository.update(_id, DTO);
-    })
-    .catch(() => {
-      throw new HttpException({
-      statusCode: "400",
-      error: "Bad request",
-      message: "No such user"
-    }, 400)})
-    return await this.lvlRepository.findOneOrFail({where: {id: _id}, relations: {workers: true}})
+    const original = await this.lvlRepository.findOne({where: {id: _id}, relations: {workers: true }})
+  if(original){  
+      await this.lvlRepository.save({id: parseInt(_id.toString()), ...DTO});
+  }   
+  const updated = await this.lvlRepository.findOne({where: {id: _id}, relations: {workers: true }})     
+  return updated
   }
 
-  async put(_id: number, DTO: CreateLvlDTO): Promise<Lvl>{
+  async put(_id: number, DTO: CreateLvlDTO): Promise<Lvl> {
     checkNumberOfProperties(DTO);
-    await this.lvlRepository.findOneOrFail({where: {id: _id}, relations: {workers: true}})
-    .then(() => {
-    this.lvlRepository.update(_id, DTO);
-    })
-    .catch(() => {
-      this.lvlRepository.insert({
-        id: _id,
-        ...DTO
-      })});
-      return await this.lvlRepository.findOneOrFail({where: {id: _id}, relations: {workers: true}})
+    const original = await this.lvlRepository.findOne({where: {id: _id}, relations: {workers: true }})
+  if(original){  
+      await this.lvlRepository.save({id: parseInt(_id.toString()), ...DTO});
+  }   
+  const updated = await this.lvlRepository.findOne({where: {id: _id}, relations: {workers: true }})     
+  return updated
   }
 
-  async create(DTO: CreateLvlDTO): Promise<Lvl>{
-    checkNumberOfProperties(DTO);
-    await this.lvlRepository.insert(DTO);
-    return await this.lvlRepository.findOneOrFail({where: {...DTO},relations: {workers: true}}) 
+  async create(DTO: CreateLvlDTO): Promise<void>{;
+    await this.lvlRepository.save(DTO); 
   }
 }

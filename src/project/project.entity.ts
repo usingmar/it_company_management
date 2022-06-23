@@ -14,11 +14,8 @@ export class Project {
   @Column()
   stage: string;
 
-  @Column()
-  departmentid: number;
-
   @ManyToOne(() => Department, (department) => department.projects, {onDelete: 'SET NULL', onUpdate: 'CASCADE'})
-  @JoinColumn({name: 'departmentid'})
+  @JoinColumn({name: "departmentid"})
   department: Department;
 
   @ManyToMany(() => Technology, (technology) => technology.projects)

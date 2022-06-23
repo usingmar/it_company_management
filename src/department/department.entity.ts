@@ -14,11 +14,8 @@ export class Department {
   @Column({type: 'varchar', length: 255})
   departmentlocation: string;
 
-  @Column()
-  companyid: number;
-
   @ManyToOne(() => Company, company => company.departments, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
-  @JoinColumn({name: 'companyid'})
+  @JoinColumn({name: "companyid"})
   company: Company;
 
   @OneToMany(() => Project, (project) => project.department)
