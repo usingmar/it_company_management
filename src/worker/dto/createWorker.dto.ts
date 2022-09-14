@@ -1,34 +1,40 @@
-import { Type } from "class-transformer";
-import { IsArray, IsByteLength, IsDate, IsDateString, IsDefined, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
-import { Department } from "src/department/department.entity";
-import { Lvl } from "src/lvl/lvl.entity";
-import { Project } from "src/project/project.entity";
+import {
+  IsArray,
+  IsByteLength,
+  IsDate,
+  IsDefined,
+  IsNumber,
+  IsString,
+} from 'class-validator';
+import { Department } from 'src/department/department.entity';
+import { Lvl } from 'src/lvl/lvl.entity';
+import { Project } from 'src/project/project.entity';
 
-export class CreateWorkerDTO{
-    @IsString()
-    @IsByteLength(0, 255)
-    workername: string;
-    
-    @IsString()
-    @IsByteLength(0, 255)
-    workersurname: string;
+export class CreateWorkerDTO {
+  @IsString()
+  @IsByteLength(0, 255)
+  workername: string;
 
-    @IsDate()
-    dateofmembership: Date;
+  @IsString()
+  @IsByteLength(0, 255)
+  workersurname: string;
 
-    @IsDefined()
-    @IsNumber()
-    salary: number;
+  @IsDate()
+  dateofmembership: Date;
 
-    @IsDefined()
-    @IsArray()
-    lvl: Lvl;
+  @IsDefined()
+  @IsNumber()
+  salary: number;
 
-    @IsDefined()
-    @IsArray()
-    department: Department;
+  @IsDefined()
+  @IsArray()
+  lvl: Lvl;
 
-    @IsDefined()
-    @IsArray()
-    projects: Project[];
+  @IsDefined()
+  @IsArray()
+  department: Department;
+
+  @IsDefined()
+  @IsArray()
+  projects: Project[];
 }

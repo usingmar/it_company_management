@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { Country } from './country.entity';
 import { CountryService } from './country.service';
 import { CreateCountryDTO } from './dto/createCountry.dto';
@@ -14,27 +23,33 @@ export class CountryController {
   }
 
   @Get(':id')
-  async get(@Param() {id}): Promise<Country>{
+  async get(@Param() { id }): Promise<Country> {
     return await this.countryService.findItem(id);
   }
 
   @Patch(':id')
-  async update(@Param() {id}, @Body() DTO: UpdateCountryDTO): Promise<Country>{
+  async update(
+    @Param() { id },
+    @Body() DTO: UpdateCountryDTO,
+  ): Promise<Country> {
     return await this.countryService.update(id, DTO);
   }
 
   @Put(':id')
-  async replace(@Param() {id}, @Body() DTO: CreateCountryDTO): Promise<Country>{
+  async replace(
+    @Param() { id },
+    @Body() DTO: CreateCountryDTO,
+  ): Promise<Country> {
     return await this.countryService.put(id, DTO);
   }
 
   @Post()
-  async create(@Body() DTO: CreateCountryDTO){
+  async create(@Body() DTO: CreateCountryDTO) {
     return await this.countryService.create(DTO);
   }
 
   @Delete(':id')
-  async delete(@Param() {id}): Promise<Country>{
+  async delete(@Param() { id }): Promise<Country> {
     return await this.countryService.remove(id);
   }
 }

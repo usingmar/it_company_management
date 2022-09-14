@@ -4,13 +4,13 @@ import { CompanyModule } from './company/company.module';
 import { CountryModule } from './country/country.module';
 import { DepartmentModule } from './department/department.module';
 import { LvlModule } from './lvl/lvl.module';
-import {config} from './orm.config'
+import { config } from './orm.config';
 import { ProjectModule } from './project/project.module';
 import { TechnologyModule } from './technology/technology.module';
 import { WorkerModule } from './worker/worker.module';
 
 @Module({
-  imports: [ 
+  imports: [
     TypeOrmModule.forRoot(config),
     CompanyModule,
     CountryModule,
@@ -18,7 +18,7 @@ import { WorkerModule } from './worker/worker.module';
     LvlModule,
     ProjectModule,
     TechnologyModule,
-    WorkerModule
-],
+    WorkerModule,
+  ],
 })
 export class AppModule {}
